@@ -100,7 +100,7 @@ pub fn emit_build_files<'lcmd>(
             &reg,
             build_dir,
             ccfg.modules,
-            ccfg.pragmas,
+            &ccfg.pragmas,
             &ccfg.crates,
         ).into_iter().collect()
     } else {
@@ -251,7 +251,7 @@ fn emit_lib_rs(
     reg: &Handlebars,
     build_dir: &Path,
     modules: Vec<PathBuf>,
-    pragmas: PragmaSet,
+    pragmas: &PragmaSet,
     crates: &CrateSet,
 ) -> Option<PathBuf> {
     let plugin_args = tcfg
