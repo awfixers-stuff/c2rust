@@ -74,7 +74,7 @@ pub fn emit_build_files<'lcmd>(
     build_dir: &Path,
     crate_cfg: Option<CrateConfig<'lcmd>>,
     workspace_members: Option<Vec<String>>,
-) -> Option<PathBuf> {
+) -> Vec<PathBuf> {
     let mut reg = Handlebars::new();
 
     reg.register_template_string("Cargo.toml", include_str!("Cargo.toml.hbs"))
@@ -93,7 +93,7 @@ pub fn emit_build_files<'lcmd>(
     if tcfg.translate_valist {
         emit_rust_toolchain(tcfg, build_dir);
     }
-    crate_cfg.and_then(|ccfg| {
+    if let Some(ccfg) = crate_cfg {
         emit_build_rs(tcfg, &reg, build_dir, ccfg.link_cmd);
         emit_lib_rs(
             tcfg,
@@ -102,8 +102,10 @@ pub fn emit_build_files<'lcmd>(
             ccfg.modules,
             ccfg.pragmas,
             &ccfg.crates,
-        )
-    })
+        ).into_iter().collect()
+    } else {
+        vec![]
+    }
 }
 
 #[derive(Serialize)]
