@@ -11,7 +11,8 @@ stdenv.mkDerivation {
     pkgs.llvm
     pkgs.libllvm
     pkgs.openssl
-    pkgs.pkgconfig
+    pkgs.pkg-config
+    pkgs.pkgconf
     pkgs.python3
     pkgs.rustup
     pkgs.zlib
