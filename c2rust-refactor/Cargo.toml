@@ -15,10 +15,10 @@ categories.workspace = true
 diff = "0.1"
 json = "0.12"
 libc = "0.2"
-regex = "1.1"
+regex = "1.8"
 ena = "0.13"
 indexmap = { version = "1.0.1", features = ["serde-1"] }
-cargo = "0.65"
+cargo = "0.72"
 clap = {version = "2.33", features = ["yaml"]}
 c2rust-analysis-rt = { path = "../analysis/runtime", version = "0.22.1" }
 env_logger = "0.10"
