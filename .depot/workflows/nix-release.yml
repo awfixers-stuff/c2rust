@@ -1,32 +1,32 @@
-name: nix-release
+# Depot CI Migration
+# Source: .github/workflows/nix-release.yml
+#
+# Changes made:
+# - Changed GitHub runs-on labels to their Depot equivalents
 
+name: nix-release
 on:
   push:
     branches:
       - master
       - main
   workflow_dispatch:
-
 jobs:
   build-and-release:
-    runs-on: ubuntu-latest
+    runs-on: depot-ubuntu-latest # was: ubuntu-latest. Mapped standard GitHub runner to Depot equivalent.
     outputs:
       tag: ${{ steps.tag.outputs.tag }}
     steps:
       - uses: actions/checkout@v4
-
       - name: Generate tag
         id: tag
         run: echo "tag=pushbuild.$(date +%Y%m%d).$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
-
       - name: Install Nix
         uses: cachix/install-nix-action@v27
         with:
           nix_path: nixpkgs=channel:nixos-unstable
-
       - name: Build
         run: nix-shell --run "cargo build --release"
-
       - name: Delete existing release with same tag
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -35,7 +35,6 @@ jobs:
             gh release delete ${{ steps.tag.outputs.tag }} --yes
             git push --delete origin ${{ steps.tag.outputs.tag }} || true
           fi
-
       - name: Create Release
         if: success()
         uses: softprops/action-gh-release@v2
